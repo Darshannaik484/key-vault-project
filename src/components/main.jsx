@@ -10,7 +10,9 @@ const EncryptionToolbox = () => {
   const [key, setKey] = useState("");
   const [shift, setShift] = useState(3);
   const [algorithm, setAlgorithm] = useState("CaesarEncrypt");
-
+  const [key1, setKey1] = useState("");
+  const [key2, setKey2] = useState("");
+  const [key3, setKey3] = useState("");
   const handleRun = () => {
     try {
       let output = "";
@@ -29,43 +31,13 @@ const EncryptionToolbox = () => {
 
       // Test Caesar Cipher directly
       if (algorithm === "CaesarEncrypt") {
-        console.log("Testing Caesar Cipher...");
-        console.log("Caesar instance:", caesar);
-        console.log("Available methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(caesar)));
-        
-        try {
-          output = caesar.encrypt(text);
-          console.log("Caesar output:", output);
-        } catch (caesarError) {
-          console.error("Caesar specific error:", caesarError);
-          throw caesarError;
-        }
+        output = caesar.encrypt(text);
       } else if (algorithm === "CaesarDecrypt") {
         output = caesar.decrypt(text);
       } else if (algorithm === "aes256Encrypt") {
-        console.log("Testing AES-256 Encrypt...");
-        console.log("AES instance:", aes);
-        console.log("Available AES methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(aes)));
-        
-        try {
-          output = aes.aes256Encrypt(text, key);
-          console.log("AES encrypt output:", output);
-        } catch (aesError) {
-          console.error("AES encrypt error:", aesError);
-          throw aesError;
-        }
+        output = aes.aes256Encrypt(text, key);
       } else if (algorithm === "aes256Decrypt") {
-        console.log("Testing AES-256 Decrypt...");
-        console.log("AES instance:", aes);
-        console.log("Available AES methods:", Object.getOwnPropertyNames(Object.getPrototypeOf(aes)));
-        
-        try {
-          output = aes.aes256Decrypt(text, key);
-          console.log("AES decrypt output:", output);
-        } catch (aesError) {
-          console.error("AES decrypt error:", aesError);
-          throw aesError;
-        }
+        output = aes.aes256Decrypt(text, key);
       } else if (algorithm === "RSAEncrypt") {
         output = rsa.rsaencrypt(text);
       } else if (algorithm === "RSADecrypt") {
@@ -75,9 +47,9 @@ const EncryptionToolbox = () => {
       } else if (algorithm === "XORDecrypt") {
         output = xor.XorDecrypt(text, key);
       } else if (algorithm === "TrippleDESEncrypt") {
-        output = trippleDES.tripleDESEncrypt(text, key);
+        output = trippleDES.tripledesencrypt(text, key1, key2, key3);
       } else if (algorithm === "TrippleDESDecrypt") {
-        output = trippleDES.tripleDESDecrypt(text, key);
+        output = trippleDES.tripledesdecrypt(text, key1, key2, key3);
       } else {
         output = "Unsupported algorithm selected.";
       }
@@ -131,20 +103,37 @@ const EncryptionToolbox = () => {
         />
       )}
 
-      {[
-        "aes256Encrypt",
-        "aes256Decrypt",
-        "XOREncrypt",
-        "XORDecrypt",
-        "TrippleDESEncrypt",
-        "TrippleDESDecrypt",
-      ].includes(algorithm) && (
+      {["aes256Encrypt", "aes256Decrypt", "XOREncrypt", "XORDecrypt"].includes(
+        algorithm
+      ) && (
         <Input
           placeholder="Enter key"
           value={key}
           onChange={(e) => setKey(e.target.value)}
           style={{ marginBottom: 10 }}
         />
+      )}
+      {["TrippleDESEncrypt", "TrippleDESDecrypt"].includes(algorithm) && (
+        <>
+          <Input
+            placeholder="Enter Key 1"
+            value={key1}
+            onChange={(e) => setKey1(e.target.value)}
+            style={{ marginBottom: 10 }}
+          />
+          <Input
+            placeholder="Enter Key 2"
+            value={key2}
+            onChange={(e) => setKey2(e.target.value)}
+            style={{ marginBottom: 10 }}
+          />
+          <Input
+            placeholder="Enter Key 3"
+            value={key3}
+            onChange={(e) => setKey3(e.target.value)}
+            style={{ marginBottom: 10 }}
+          />
+        </>
       )}
 
       <Button type="primary" onClick={handleRun} block>
